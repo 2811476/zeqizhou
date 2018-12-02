@@ -1,0 +1,495 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   main.cpp
+ * Author: apple
+ *
+ * Created on 2018年11月3日, 上午6:26
+ */
+
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <stdlib.h>
+
+
+using namespace std;
+int main(int argc, char** argv) {
+    const int lstart=1,cmiv=1,cmav=3;
+    const int mav=6;
+    int dice1=0,dice2=0,dice3=0,dice4=0,dice5=0;
+     int nones,ntwos,nthres,nfours,nfives,nsixs;
+    int Pones,Ptwos,Pthrees,Pfours,
+        Pfives,Psixs,Pyatz,Plstra,Psstra; 
+    int cones,ctwos,cthres,cfours,cfives,
+        csixs,cYatze,clstra,csstra;
+    int cont=0,SUM=0,BONUS=0,tscore;
+    int num, throws;
+    char choose1;
+    char choice,result;
+    char n,anyn;
+    bool alpick=false, pick1=false, pick2=false, pick3=false, pick4=false, 
+            pick5=false, pick6=false,pYaze=false,plstra=false,psstra=false;
+    bool roll1=true, roll2=true,roll3=true,roll4=true,roll5=true;
+    ofstream sFile;
+    string Uname;
+    float chYahtz=1.0/1296.0, ch3OK=(250.0/1296.0), chPair=5400.0/7776.0, ch4OK=25.0/1296.0; 
+    unsigned seed=time(0);
+    srand(seed);
+    
+    cout<<"This game is Yahtzee, and there is the rule of Yahtzee.You can "
+            "totally roll five dices(if you save some dices, you can roll them "
+            "again ) for three times"
+            
+            " again.last for three times.Finally, you should choose a score to "
+            "keep,and you can only choose a score once.The game end "
+            "when you fill score table. (Five of kind is "
+            "Yahtzee)"<<endl;
+    cout<<"Press any key to begin."<<endl;
+    cin>>anyn;
+    
+        cones=0;
+        ctwos=0;
+        cthres=0;
+        cfours=0;
+        cfives=0;
+        csixs=0;
+        cYatze=0;
+        clstra=0;
+        csstra=0;
+        Pones=0;
+        Ptwos=0;
+        Pthrees=0;
+        Pfours=0;
+        Pfives=0;
+        Psixs=0;
+        Pyatz=0;
+        Plstra=0;
+        Psstra=0;
+        
+         cout<<"-------------------------------------------------------"<<endl;
+        cout<<"Score."<<setw(5)<< " potential scores."<<setw(2)<<" current score."<<endl;
+        cout<<"1.Ones "<<setw(12)<<Pones<<" "<<setw(15)<<cones<<" "<<endl;
+        cout<<"2.Twos "<<setw(12)<<Ptwos<<" "<<setw(15)<<ctwos<<" "<<endl;
+        cout<<"3.Threes "<<setw(10)<<Pthrees<<" "<<setw(15)<<cthres<<" "<<endl;
+        cout<<"4.Fours "<<setw(11)<<Pfours<<" "<<setw(15)<<cfours<<" "<<endl;
+        cout<<"5.Fives "<<setw(11)<<Pfives<<" "<<setw(15)<<cfives<<" "<<endl;
+        cout<<"6.Sixs "<<setw(12)<<Psixs<<" "<<setw(15)<<csixs<<" "<<endl;
+        cout<<" SUM   "<<setw(12)<<SUM<<" "<<setw(15)<<BONUS<<" "<<endl;
+        cout<<"7.Yahtzee "<<setw(9)<<Pyatz<<" "<<setw(15)<<cYatze<<" "<<endl;
+        cout<<"8.Large straight"<<setw(3)<<Plstra<<" "<<setw(15)<<clstra<<" "<<endl;
+        cout<<"9.small straight"<<setw(3)<<Psstra<<" "<<setw(15)<<csstra<<" "<<endl;
+        
+        //The probability of getting different types of dices
+        cout<<"Here is the probability of getting on the first try:"<<endl;
+        cout<<"Pair: "<<setw(5)<<setprecision(4)<<100*chPair<<"%"<<endl;
+        cout<<"Three of kind: "<<setw(5)<<100*ch3OK<<"%"<<endl;
+        cout<<"Four of kind: "<<setw(5)<<100*ch4OK<<"%"<<endl;
+        cout<<"Yahtzee: "<<setw(5)<<100*chYahtz<<"%"<<endl;
+        
+        
+    do{
+        
+        
+        
+
+        throws=cmav;
+        roll1=true, roll2=true,roll3=true,roll4=true,roll5=true;
+        for(num=cmiv;num<=cmav;num++ ){
+            
+        //for loop repeats 3 times, tells the user what throw its on.
+        if(roll1){
+    dice1 =(rand()% (mav-lstart+1))+ lstart;
+        }
+        if(roll2){
+    dice2=(rand()% (mav-lstart+1))+ lstart;
+        }
+        if(roll3){
+    dice3=(rand()% (mav-lstart+1))+ lstart;
+        }
+        if(roll4){
+    dice4=(rand()% (mav-lstart+1))+ lstart;
+        }
+        if(roll5){
+    dice5=(rand()% (mav-lstart+1))+ lstart;
+        }
+        if(num!=cmav){
+    cout<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "<<dice5<<
+             "  Do you want to keep dice1 ? (Type 'y' or 'n' ). "<<endl;
+    cin>>choose1;
+    if(choose1 =='y'){
+        roll1=false;
+    }
+    else{
+        roll1=true;
+    }
+    
+    cout<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "<<dice5<<
+            "  Do you want to keep dice2 ? (Type 'y' or 'n' ). "<<endl;
+    cin>>choose1;
+    if(choose1 =='y'){
+        roll2=false;
+    }
+    else{
+        roll2=true;
+    }
+    
+    
+    cout<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "<<dice5<<
+            "  Do you want to keep dice3 ? (Type 'y' or 'n' ). "<<endl;
+    cin>>choose1;
+    if(choose1=='y'){
+        roll3=false;
+    }
+    else{
+        roll3=true;
+    }
+    
+    
+    cout<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "<<dice5<<
+            "  Do you want to keep dice4 ? (Type 'y' or 'n' ). "<<endl;
+    cin>>choose1;
+    if(choose1 =='y'){
+        roll4 = false;
+    }
+    else{
+        roll4=true;
+    }
+    cout<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "<<dice5<<
+            "  Do you want to keep dice5 ? (Type 'y' or 'n' ). "<<endl;
+    cin>>choose1;
+    if(choose1 =='y'){
+        roll5=false;
+    }
+    else{
+        roll5=true;
+    }
+        }
+    throws--;
+    cout<<"You have "<<throws<<" left "<<endl;
+        }
+        cout<<"Final Rolls: "<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "
+                <<dice5<<endl;
+    //cout "you have x throws left"
+    //end of for loop
+        nones=0;
+        ntwos=0;
+        nthres=0;
+        nfours=0;
+        nfives=0;
+        nsixs=0;
+        switch(dice1)
+        {
+            case 1 : nones++;
+            break;
+            case 2 : ntwos++;
+            break;
+            case 3 : nthres++;
+            break;
+            case 4 : nfours++;
+            break;
+            case 5 : nfives++;
+            break;
+            case 6 : nsixs++;
+            break;
+                    
+        }
+        
+         switch(dice2)
+        {
+            case 1 : nones++;
+            break;
+            case 2 : ntwos++;
+             break;
+            case 3 : nthres++;
+             break;
+            case 4 : nfours++;
+             break;
+            case 5 : nfives++;
+             break;
+            case 6 : nsixs++;
+             break;
+                    
+        }
+         
+         switch(dice3)
+        {
+            case 1 : nones++;
+             break;
+            case 2 : ntwos++;
+             break;
+            case 3 : nthres++;
+             break;
+            case 4 : nfours++;
+             break;
+            case 5 : nfives++;
+             break;
+            case 6 : nsixs++;
+             break;
+                    
+        } 
+          switch(dice4)
+        {
+            case 1 : nones++;
+             break;
+            case 2 : ntwos++;
+             break;
+            case 3 : nthres++;
+             break;
+            case 4 : nfours++;
+             break;
+            case 5 : nfives++;
+             break;
+            case 6 : nsixs++;
+             break;
+                    
+        }
+           switch(dice5)
+        {
+            case 1 : nones++;
+             break;
+            case 2 : ntwos++;
+             break;
+            case 3 : nthres++;
+             break;
+            case 4 : nfours++;
+             break;
+            case 5: nfives++;
+             break;
+            case 6 : nsixs++;
+             break;
+                    
+        }
+        
+           cout<<"1's: "<<nones<<" 2's: "<<ntwos<<" 3's: "<<nthres<<
+                   " 4's: "<<nfours<<" 5's: "<<nfives<<" 6's: "<<nsixs
+                   <<endl;
+           //example 2's: number of twos*2
+           Pones=static_cast<int> (nones)*1;
+           Ptwos=static_cast<int>(ntwos)*2;
+           Pthrees=static_cast<int>(nthres)*3;
+           Pfours=static_cast<int>(nfours)*4;
+           Pfives=static_cast<int>(nfives)*5;
+           Psixs=static_cast<int>(nsixs)*6;
+           if(nones==5||ntwos==5||nthres==5||nfours==5||nfives==5||nsixs==5){
+               
+               Pyatz=50;
+           }
+                    SUM=cones+ctwos+cthres+cfours+cfives+csixs;
+                    if(SUM>=63){
+                     BONUS=35;  
+                    }
+           if((nones==1&&ntwos==1&&nthres==1&&nfours==1&&nfives==1)|| 
+                   (ntwos==1&&nthres==1&&nfours==1&&nfives==1&&nsixs==1)){
+               Plstra=40;
+           }     
+       if((nones>=1&&ntwos>=1&&nthres>=1&&nfours>=1)||(ntwos>=1&&
+                            nthres>=1&&nfours>=1&&nfives>=1)||(nthres>=1&&
+                            nfours>=1&&nfives>=1&&nsixs>=1)){
+                        Psstra=30;
+                    }
+                   
+        cont=0;   
+        do{   
+        
+        cout<<"-------------------------------------------------------"<<endl;
+        cout<<"Score."<<setw(7)<< " potential scores."<<setw(2)<<" current score."<<endl;
+        cout<<"1.Ones "<<setw(12)<<Pones<<" "<<setw(15)<<cones<<" "<<endl;
+        cout<<"2.Twos "<<setw(12)<<Ptwos<<" "<<setw(15)<<ctwos<<" "<<endl;
+        cout<<"3.Threes "<<setw(10)<<Pthrees<<" "<<setw(15)<<cthres<<" "<<endl;
+        cout<<"4.Fours "<<setw(11)<<Pfours<<" "<<setw(15)<<cfours<<" "<<endl;
+        cout<<"5.Fives "<<setw(11)<<Pfives<<" "<<setw(15)<<cfives<<" "<<endl;
+        cout<<"6.Sixs "<<setw(12)<<Psixs<<" "<<setw(15)<<csixs<<" "<<endl;
+        cout<<" SUM   "<<setw(12)<<SUM<<" "<<setw(15)<<BONUS<<" "<<endl;
+        cout<<"7.Yahtzee "<<setw(9)<<Pyatz<<" "<<setw(15)<<cYatze<<" "<<endl;
+        cout<<"8.Large straight"<<setw(3)<<Plstra<<" "<<setw(15)<<clstra<<" "<<endl;
+        cout<<"9.small straight"<<setw(3)<<Psstra<<" "<<setw(15)<<csstra<<" "<<endl;
+        cout<<"Final Rolls: "<<dice1<<" "<<dice2<<" "<<dice3<<" "<<dice4<<" "
+                <<dice5<<endl;
+        
+        cout<<"Please determine your choice.Enter the number assigned to "
+                "the score to keep."<<endl;
+        
+        cin>>choice;
+        
+       
+        switch(choice)
+        {
+            case '1' : if(!pick1){
+                    cones=Pones;
+                    cont=-1;
+                    pick1=true;
+                    }
+                    else{
+                system("Color 1A");
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    system("Color 3B");                    }
+            break;
+                
+            
+        case '2': if(!pick2){
+                    ctwos=Ptwos;
+                    cont=-1;
+                    pick2=true;
+                    }
+                    else{
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    }
+        break;
+        
+        
+        
+        case'3': if(!pick3){
+                    cthres=Pthrees;
+                    cont=-1;
+                    pick3=true;
+                    }
+                    else{
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    }
+        break;
+        
+        case '4': if(!pick4){
+                    cfours=Pfours;
+                    cont=-1;
+                    pick4=true;
+                    }
+                    else{
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    }
+        break;
+        
+        case '5': if(!pick5){
+                    cfives=Pfives;
+                    cont=-1;
+                    pick5=true;
+                    }
+                    else{
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    }
+        break;
+        
+        case '6': if(!pick6){
+                    csixs=Psixs;
+                    cont=-1;
+                    pick6=true;
+                    }
+                    else{
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    }
+        break;
+        case '7': if(!pYaze){
+                    cYatze=Pyatz;
+                    cont=-1;
+                    pYaze=true;
+                    }
+                    else{
+                    cout<<"You already pick this option. Please choose another one."<<endl;
+                    }
+        break;
+        
+            case '8':if(!plstra){
+                clstra=Plstra;
+                cont=-1;
+                plstra=true;
+            }
+            else{
+                cout<<"You already pick this option. Please choose another one. "<<endl;
+            }
+            
+            case'9':if(!psstra){
+                csstra=Psstra;
+                cont=-1;
+                psstra=true;
+                        
+            }
+            else{
+                cout<<"You already pick this option. Please choose another one. "<<endl; 
+            }
+        default: cout<<"Invaild option, please choose another one."<<endl;
+            
+            
+        
+        
+        }
+           
+        } while(cont!=-1);
+        
+        SUM=cones+ctwos+cthres+cfours+cfives+csixs;
+                    if(SUM>=63){
+                     BONUS=35;  
+                    }
+          cout<<"-------------------------------------------------------"<<endl;
+        cout<<"Score."<<setw(5)<< " potential scores."<<setw(2)<<" current score."<<endl;
+        cout<<"1.Ones "<<setw(12)<<Pones<<" "<<setw(15)<<cones<<" "<<endl;
+        cout<<"2.Twos "<<setw(12)<<Ptwos<<" "<<setw(15)<<ctwos<<" "<<endl;
+        cout<<"3.Threes "<<setw(10)<<Pthrees<<" "<<setw(15)<<cthres<<" "<<endl;
+        cout<<"4.Fours "<<setw(11)<<Pfours<<" "<<setw(15)<<cfours<<" "<<endl;
+        cout<<"5.Fives "<<setw(11)<<Pfives<<" "<<setw(15)<<cfives<<" "<<endl;
+        cout<<"6.Sixs "<<setw(12)<<Psixs<<" "<<setw(15)<<csixs<<" "<<endl;
+        cout<<" SUM   "<<setw(12)<<SUM<<" "<<setw(15)<<BONUS<<" "<<endl;
+        cout<<"7.Yahtzee "<<setw(9)<<Pyatz<<" "<<setw(15)<<cYatze<<" "<<endl;
+        cout<<"8.Large straight"<<setw(3)<<Plstra<<" "<<setw(15)<<clstra<<" "<<endl;
+        cout<<"9.small straight"<<setw(3)<<Psstra<<" "<<setw(15)<<csstra<<" "<<endl;
+           
+           
+        
+        alpick=(pick1&&pick2&&pick3&&pick4&&pick5&&pick6&&pYaze&&plstra&&psstra);
+    cout<<"want to quit?(y or q to quit)"<<endl;
+    cin>> n;
+    } while(n!='y'&&n!='q'&&!alpick);
+    tscore=SUM+BONUS+cYatze;
+    cout<<"The game is over."<<endl;
+    cout<<"Your total score is "<<tscore<<"."<<endl;
+    if(tscore>=100){
+        if(tscore=120){
+            cout<<"You are excellent!"<<endl;
+        }
+        cout<<"You got over 100 points. Good job!"<<endl;
+    }
+    else if(tscore<100&&tscore>50){
+        cout<<"You may do better next time."<<endl;
+        
+        
+    }
+    else{
+        cout<<"You are not good in this term!"<<endl;
+    }
+    cout<<"Do you want to save your result?(y or n)"<<endl;
+    cin>>result;
+    if (result=='y'){
+        cout<<"What is your name?"<<endl;
+        cin>>Uname;
+        Uname.append(".txt");
+        sFile.open(Uname);
+        sFile<<"Yahtzee Score:"<<endl<<endl;
+        
+       sFile<<"-------------------------------------------------------"<<endl;
+        sFile<<"Score."<<setw(5)<< " potential scores."<<setw(2)<<" current score."<<endl;
+        sFile<<"1.Ones "<<setw(12)<<Pones<<" "<<setw(15)<<cones<<" "<<endl;
+        sFile<<"2.Twos "<<setw(12)<<Ptwos<<" "<<setw(15)<<ctwos<<" "<<endl;
+        sFile<<"3.Threes "<<setw(10)<<Pthrees<<" "<<setw(15)<<cthres<<" "<<endl;
+        sFile<<"4.Fours "<<setw(11)<<Pfours<<" "<<setw(15)<<cfours<<" "<<endl;
+        sFile<<"5.Fives "<<setw(11)<<Pfives<<" "<<setw(15)<<cfives<<" "<<endl;
+        sFile<<"6.Sixs "<<setw(12)<<Psixs<<" "<<setw(15)<<csixs<<" "<<endl;
+        sFile<<" SUM   "<<setw(12)<<SUM<<" "<<setw(15)<<BONUS<<" "<<endl;
+        sFile<<"7.Yahtzee "<<setw(9)<<Pyatz<<" "<<setw(15)<<cYatze<<" "<<endl;
+        sFile<<"8.Large straight"<<setw(3)<<Plstra<<" "<<setw(15)<<clstra<<" "<<endl;
+        sFile<<"9.small straight"<<setw(3)<<Psstra<<" "<<setw(15)<<csstra<<" "<<endl;
+        
+        sFile<<"-------------------------------------------------------"<<endl;
+        sFile<<"Your final score is: "<<tscore<<" ."<<endl;
+        sFile.close();
+        cout<<"Your game was saved as: "<<Uname<<endl;
+    }
+    
+    return 0;
+
+}
