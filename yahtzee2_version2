@@ -1,0 +1,82 @@
+//zeqi zhou
+
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <stdlib.h>
+
+
+
+using namespace std;
+int roll();
+void rollhand(int ar[],int size);
+void rollhand(int ar[],bool toroll[],int size);
+void showhand(int ar[], int size);
+void pickhand(bool pdice[], int size);
+
+int main(int argc, char** argv) {
+    {
+    unsigned seed=time(0);
+    srand(seed);
+    }//randomseed
+    
+    int numdice = 5;//preallocating size
+    int dice[numdice];//preallocation
+    bool truroll[numdice]; 
+    rollhand(dice,numdice);
+    pickhand(truroll,numdice);
+    rollhand(dice,truroll,numdice);
+    pickhand(truroll,numdice);
+    rollhand(dice,truroll,numdice);
+    
+    return 0;
+}
+
+int roll(){
+    const int mav=6,lstart=1;
+    return (rand()% (mav-lstart+1))+ lstart;
+}//roll a dice
+void rollhand(int ar[],int size){
+    for(int i=0;i<size;i++){
+        ar[i]=roll();
+    }
+    showhand(ar,size);
+    return;
+}
+void rollhand(int ar[],bool toroll[],int size){
+    for(int i=0;i<size;i++){
+        if(toroll[i]){
+            ar[i]=roll();
+        }
+    }
+    showhand(ar, size);
+    return;
+}
+void showhand(int ar[], int size){
+    for(int i=0;i<size;i++){
+        cout<<" "<<ar[i];
+    }  
+    cout<<endl<<endl;
+    return;
+}
+void pickhand(bool pdice[],int size){
+    char yesno;
+    cout<<"Which dice you want to keep?"<<endl;
+    for(int i=0;i<size;i++){
+       cout<<"Keep dice "<<i<<"?(y or n)"<<endl;
+       cin>>yesno;
+       while(yesno!='y'&& yesno!='n'){
+       cout<<"Invaild option, please choose 'y' or 'n'."<<endl;
+       cin>>yesno;
+       }
+       if(yesno=='y'){
+           pdice[i]=false;
+       }
+       else{
+           pdice[i]=true;
+       }
+    }
+}
