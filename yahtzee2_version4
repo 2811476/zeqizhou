@@ -1,0 +1,205 @@
+//zeqi zhou
+
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <ctime>
+#include <cstdlib>
+#include <fstream>
+#include <stdlib.h>
+
+
+
+using namespace std;
+int roll();
+int dicesum(int ar[],int size);
+void rollhand(int ar[],int size);
+void rollhand(int ar[],bool toroll[],int size);
+void showhand(int ar[], int size);
+void pickhand(bool pdice[], int size);
+void bubsort(int ar[], int size);
+void basicscore(int ar[],int size,int sc[],int nscore );
+void bonus(int bonus,int sc[],int nscore);//NEEDS DEFINITION
+void kind(int ar[],int size,int sc[],int nscore );
+void house(int ar[],int size,int sc[], int nscore);
+void sstraight(int sc[], int nscore);
+void lstraight(int ar[],int size,int sc[], int nscore);
+void chance(int ar[],int size,int sc[], int nscore);
+void yahtzee(int ar[],int size, int sc[],int nscore);
+
+int main(int argc, char** argv) {
+    {
+    unsigned seed=time(0);
+    srand(seed);
+    }//randomseed
+    
+    int numdice = 5,numscores=14;//preallocating size
+    int dice[numdice],scores[numscores];//preallocation
+    bool truroll[numdice]; 
+    rollhand(dice,numdice);
+    pickhand(truroll,numdice);
+    rollhand(dice,truroll,numdice);
+    pickhand(truroll,numdice);
+    rollhand(dice,truroll,numdice);
+    dice[0]=4,dice[1]=4,dice[2]=4,dice[3]=4,dice[4]=4;
+    basicscore(dice,numdice,scores,numscores);
+    scores[6]=0;
+    kind(dice,numdice,scores,numscores);
+    
+    house(dice,numdice,scores,numscores);
+    sstraight(scores,numscores);
+    lstraight(dice,numdice,scores,numscores);
+    chance(dice,numdice,scores,numscores);
+    yahtzee(dice,numdice,scores,numscores);
+    
+    
+    for(int i=0;i<14;i++){
+        cout<<i+1<<": "<<scores[i]<<endl;
+    }
+    
+    return 0;
+}
+
+int roll(){
+    const int mav=6,lstart=1;
+    return (rand()% (mav-lstart+1))+ lstart;
+}//roll a dice
+
+int dicesum(int ar[],int size){
+    int sum=0;
+    for(int i=0;i<size;i++){
+        sum=sum + ar[i];
+        //cout<<"Sum of dice: "<<sum<<endl;
+    }
+    return sum;
+        
+}
+void rollhand(int ar[],int size){
+    for(int i=0;i<size;i++){
+        ar[i]=roll();
+    }
+    bubsort(ar,size);
+    showhand(ar,size);
+    return;
+}
+void rollhand(int ar[],bool toroll[],int size){
+    for(int i=0;i<size;i++){
+        if(toroll[i]){
+            ar[i]=roll();
+        }
+    }
+    bubsort(ar,size);
+    showhand(ar, size);
+    return;
+}
+void showhand(int ar[], int size){
+    
+    for(int i=0;i<size;i++){
+        cout<<" "<<ar[i];
+    }  
+    cout<<endl<<endl;
+    return;
+}
+void pickhand(bool pdice[],int size){
+    char yesno;
+    cout<<"Which dice you want to keep?"<<endl;
+    for(int i=0;i<size;i++){
+       cout<<"Keep dice "<<i<<"?(y or n)"<<endl;
+       cin>>yesno;
+       while(yesno!='y'&& yesno!='n'){
+       cout<<"Invaild option, please choose 'y' or 'n'."<<endl;
+       cin>>yesno;
+       }
+       if(yesno=='y'){
+           pdice[i]=false;
+       }
+       else{
+           pdice[i]=true;
+       }
+    }
+    return;
+}
+
+void bubsort(int ar[], int size){
+    bool bub=false;
+    int keep;
+    do{
+        bub=false;
+        for(int numb=0;numb<(size-1);numb++){
+            if (ar[numb]>ar[numb+1]){
+                keep=ar[numb];
+                ar[numb]=ar[numb+1];
+                ar[numb+1]=keep;
+                bub=true;
+            }
+        }
+    }while(bub);
+    return;
+}
+void basicscore(int ar[],int size,int sc[],int nscore ){
+    for(int i=0;i<6;i++){
+        sc[i]=0;
+    }
+    for(int j=0;j<size;j++){
+        sc[ar[j]-1]=sc[ar[j]-1]+ar[j];
+    }
+    return;
+}
+void bonus(int bonus,int sc[],int nscore){
+    return;
+}
+
+void kind(int ar[],int size,int sc[],int nscore ){
+    bool three=false,four=false;
+    int num=0;
+    sc[7]=0;
+    sc[8]=0;
+    for(int i=0;i<6;i++){
+        num=sc[i]/(i+1);
+        //cout<<num<<endl;
+        if(num>=3 && !three){
+            sc[7]=dicesum(ar,size);  
+            three=true;
+        }
+        if(num>=4 && !four){
+            sc[8]=dicesum(ar,size);
+            four=true;
+        }
+    }
+    return;
+}
+void house(int ar[],int size,int sc[],int nscore){
+    sc[9]=0;
+    if(((ar[0]==ar[1]==ar[2]&&ar[3]==ar[4])||(ar[0]==ar[1]&&ar[2]==ar[3]==ar[4]))&&(ar[0]!=ar[4])){
+        sc[9]=25;
+    }
+    return;
+}
+void sstraight(int sc[], int nscore){
+    sc[10]=0;
+    if((sc[0]>0 && sc[1]>0 && sc[2]>0 && sc[3]>0)||(sc[1]>0 && sc[2]>0 && sc[3]>0 && sc[4]>0)||
+            (sc[2]>0 && sc[3]>0 && sc[4]>0 && sc[5]>0)){
+        sc[10]=30;
+   }
+    return;
+}
+
+void lstraight(int ar[],int size,int sc[], int nscore){
+    sc[11]=0;
+    if((ar[1]==ar[0]+1&&ar[2]==ar[0]+2&&ar[3]==ar[0]+3&&ar[4]==ar[0]+4)){
+        sc[11]=40;
+    }
+    return;
+}
+void chance(int ar[],int size,int sc[], int nscore){
+    sc[12]=dicesum(ar,size);
+    return;
+}
+
+void yahtzee(int ar[],int size, int sc[],int nscore){
+    sc[13]=0;
+    if(ar[0] == ar[1] && ar[0] == ar[2] && ar[0] == ar[3] && ar[0] == ar[4]){
+        sc[13]=50;
+    }
+    return;
+}
